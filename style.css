@@ -1,21 +1,45 @@
 body {
   font-family: Arial, sans-serif;
-  background: #f4f4f4;
+  background-image: url("home.jpg");
+  overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   margin: 0;
-  padding: 20px;
+  padding: 0;
+  height: 100vh;
+
+  display: flex;                  /* enable flexbox */
+  justify-content: center;       /* center horizontally */
+  align-items: center;           /* center vertically */
 }
+
 
 .app-container {
   max-width: 700px;
   margin: auto;
-  background: white;
+  background: -moz-linear-gradient();
   padding: 20px;
   border-radius: 10px;
+  
 }
 
 h1 {
   text-align: center;
   margin-bottom: 20px;
+  -webkit-text-fill-color: #c0e6e8;
+  font-size: 3rem;
+}
+
+h2 {
+  text-align: center;
+  -webkit-text-fill-color: #148b96;
+  background-color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
 }
 
 .task-input, .filters {
@@ -23,18 +47,32 @@ h1 {
   gap: 10px;
   margin-bottom: 15px;
   flex-wrap: wrap;
+  
 }
 
 input, select, button {
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #e8dfdf;
   border-radius: 5px;
+}
+
+
+.dashboard {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  gap: 40px;                /* Space between buttons */
+  margin-top: 30px;
 }
 
 button {
   background: #3498db;
   color: white;
   cursor: pointer;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: background 0.3s;
 }
 
 button:hover {
@@ -74,4 +112,26 @@ li.high { border-color: red; }
   background: #2ecc71;
   width: 0%;
   border-radius: 5px;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  gap: 40px;               /* Space between buttons */
+  margin-top: 30px;
+}
+
+.dashboard button {
+  background: #1f8dac;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.dashboard button:hover {
+  background: #2980b9;
 }

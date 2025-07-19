@@ -5,26 +5,6 @@ function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function addTask() {
-  const text = document.getElementById("task-input").value.trim();
-  const dueDate = document.getElementById("task-date").value;
-
-  if (!text) return;
-
-  tasks.push({
-    text,
-    completed: false,
-    dueDate,
-    createdAt: new Date().toISOString()
-  });
-
-  document.getElementById("task-input").value = "";
-  document.getElementById("task-date").value = "";
-
-  saveTasks();
-  displayTasks();
-}
-
 function toggleTask(index) {
   tasks[index].completed = !tasks[index].completed;
   saveTasks();

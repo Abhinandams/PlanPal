@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Tasks</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-image: url("view_task.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .filters {
+      margin-bottom: 15px;
+    }
+
+    .filters button {
+      padding: 8px 14px;
+      margin-right: 8px;
+      border: none;
+      border-radius: 4px;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+
+    .filters button:hover {
+      background-color: #0056b3;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    button.toggle-btn {
+      padding: 5px 10px;
+      margin-left: 0;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    button.toggle-btn:hover {
+      background-color: #1e7e34;
+    }
+
+    .no-tasks {
+      text-align: center;
+      color: #777;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📋 All Tasks</h2>
+  <div class="filters">
+    <button onclick="filterTasks('all')">All</button>
+    <button onclick="filterTasks('completed')">Completed</button>
+    <button onclick="filterTasks('pending')">Pending</button>
+    <button onclick="filterTasks('overdue')">Overdue</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Due Date</th>
+        <th>Created At</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="task-table-body"></tbody>
+  </table>
+
+  <script>
+    function loadTasks() {
+      return JSON.parse(localStorage.getItem("tasks") || "[]");
+    }
+
+    function saveTasks(tasks) {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function toggleCompletion(index) {
+      const tasks = loadTasks();
+      tasks[index].completed = !tasks[index].completed;
+      saveTasks(tasks);
+      displayTasks(currentFilter); // redisplay with current filter
+    }
+
+    function deleteTask(index) {
+  const tasks = loadTasks();
+  tasks.splice(index, 1); // remove task by index
+  saveTasks(tasks);
+  displayTasks(currentFilter); // refresh the current filtered view
+}
+
+
+function displayTasks(filter = 'all') {
+  const tasks = loadTasks();
+  const tbody = document.getElementById("task-table-body");
+  tbody.innerHTML = "";
+
+  const now = new Date();
+
+  const filteredTasks = tasks.filter(task => {
+    if (filter === "completed") return task.completed;
+    if (filter === "pending") return !task.completed && (!task.dueDate || new Date(task.dueDate) >= now);
+    if (filter === "overdue") return !task.completed && task.dueDate && new Date(task.dueDate) < now;
+    return true;
+  });
+
+  if (filteredTasks.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="no-tasks">No tasks found for this filter.</td></tr>`;
+    return;
+  }
+
+  filteredTasks.forEach((task, index) => {
+    const tr = document.createElement("tr");
+
+    const desc = document.createElement("td");
+    desc.textContent = task.text;
+    if (task.completed) desc.classList.add("completed");
+
+    const due = document.createElement("td");
+    due.textContent = task.dueDate || "-";
+
+    const created = document.createElement("td");
+    created.textContent = new Date(task.createdAt).toLocaleString();
+
+    const status = document.createElement("td");
+    const toggleBtn = document.createElement("button");
+    toggleBtn.classList.add("toggle-btn");
+    toggleBtn.textContent = task.completed ? "Mark Incomplete" : "Mark Complete";
+    toggleBtn.onclick = () => toggleCompletion(tasks.indexOf(task));
+    status.appendChild(toggleBtn);
+
+    const actions = document.createElement("td");
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.style.backgroundColor = "#dc3545";
+    deleteBtn.style.color = "white";
+    deleteBtn.style.border = "none";
+    deleteBtn.style.padding = "5px 10px";
+    deleteBtn.style.borderRadius = "4px";
+    deleteBtn.style.marginLeft = "5px";
+    deleteBtn.onclick = () => deleteTask(tasks.indexOf(task));
+    actions.appendChild(deleteBtn);
+
+    tr.appendChild(desc);
+    tr.appendChild(due);
+    tr.appendChild(created);
+    tr.appendChild(status);
+    tr.appendChild(actions);
+
+    tbody.appendChild(tr);
+  });
+}
+
+
+    let currentFilter = 'all';
+
+    function filterTasks(filter) {
+      currentFilter = filter;
+      displayTasks(filter);
+    }
+
+    // Initial load
+    displayTasks();
+  </script>
+</body>
+</html>

@@ -2,38 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Advanced To-Do App</title>
+  <title>Listify</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app-container">
-    <h1>📋 My Dashboard</h1>
+    <h1>📋Listify📋</h1>
+    <h2>Your friendly companion for smarter planning</h2>
     
-    <div class="dashboard">
-      <p>Total Tasks: <span id="total-tasks">0</span></p>
-      <p>Completed: <span id="completed-tasks">0</span></p>
-      <p>Pending: <span id="pending-tasks">0</span></p>
-      <p>Overdue: <span id="overdue-tasks">0</span></p>
-      <div class="progress-bar">
-        <div class="progress" id="progress-bar-fill"></div>
-      </div>
-    </div>
-
-    <div class="task-input">
-      <input type="text" id="task-input" placeholder="Task description">
-      <input type="date" id="task-date">
-      <button onclick="addTask()">Add Task</button>
-    </div>
-
-    <div class="filters">
-      <button onclick="filterTasks('all')">All</button>
-      <button onclick="filterTasks('completed')">Completed</button>
-      <button onclick="filterTasks('pending')">Pending</button>
-      <button onclick="filterTasks('overdue')">Overdue</button>
-    </div>
-
-    <ul id="task-list"></ul>
-  </div>
+   <div class="dashboard">
+  <button onclick="location.href='add_task.html'">Add New Task</button>
+  <button onclick="location.href='view_task.html'">View All Tasks</button>
+</div>
 
   <script src="script.js"></script>
 </body>

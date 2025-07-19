@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-image: url("add_task.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .task-input {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 30px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    input[type="text"], input[type="date"] {
+      padding: 12px 20px;
+      font-size: 18px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 300px;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 18px;
+      background-color: #27add2;
+      color: rgb(30, 28, 28);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #27add2;
+    }
+
+    #task-message {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="task-input">
+    <input type="text" id="task-input" placeholder="Task description" />
+    <input type="date" id="task-date" />
+    <button onclick="addTask()">Add Task</button>
+    <p id="task-message"></p>
+  </div>
+
+  <script>
+    function addTask() {
+      const text = document.getElementById("task-input").value.trim();
+      const dueDate = document.getElementById("task-date").value;
+
+      if (!text) return;
+
+      let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+      tasks.push({
+        text,
+        completed: false,
+        dueDate,
+        createdAt: new Date().toISOString()
+      });
+
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+
+      document.getElementById("task-input").value = "";
+      document.getElementById("task-date").value = "";
+      document.getElementById("task-message").textContent = "✅ Task added successfully!";
+
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
