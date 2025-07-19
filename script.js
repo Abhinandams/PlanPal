@@ -74,23 +74,52 @@ function notifyUser(message) {
 }
 
 function checkDueTasks() {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date();
+  const todayStr = today.toISOString().split("T")[0];
 
   tasks.forEach(task => {
-    if (!task.completed && task.dueDate === today) {
+    if (!task.dueDate || task.completed) return;
+
+    const dueDate = new Date(task.dueDate);
+
+    // Format due date as string for comparison
+    const dueStr = dueDate.toISOString().split("T")[0];
+
+    // 1. Alert if due today
+    if (dueStr === todayStr) {
       notifyUser(`"${task.text}" is due today.`);
     }
 
-    if (!task.completed && task.dueDate && task.dueDate < today) {
+    // 2. Alert if overdue
+    if (dueDate < today) {
       notifyUser(`"${task.text}" is overdue!`);
+    }
+
+    // 3. Alert if due tomorrow (from today’s perspective)
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split("T")[0];
+
+    if (dueStr === tomorrowStr) {
+      notifyUser(`Heads up! "${task.text}" is due tomorrow.`);
     }
   });
 }
+
+// Check once on load
+checkDueTasks();
+
+// Then check every 6 hours (or change to 86400000 for 24 hours)
+setInterval(checkDueTasks, 6 * 60 * 60 * 1000); 
+
 
 // Ask permission for notifications
 if ("Notification" in window && Notification.permission !== "granted") {
   Notification.requestPermission();
 }
+
+
+
 
 // Load
 displayTasks();
